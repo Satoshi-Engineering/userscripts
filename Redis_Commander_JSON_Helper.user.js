@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Redis Commander JSON Helper
-// @namespace    http://tampermonkey.net/
+// @namespace    https://satoshiengineering.com/
 // @version      0.1
-// @description  try to take over the world!
-// @author       You
+// @description  Help you editing JSONs in Redis Commander
+// @author       dave@satoshiengineering.com
 // @match        http://localhost:6380/
 // @match        https://rcmd.coinr.satoshiengineering.com/
 // @icon         https://rcmd.coinr.satoshiengineering.com/favicon.png
@@ -44,6 +44,7 @@
 
         const button = document.createElement('button')
         button.textContent = 'JSON.SET 👇'
+        button.title = 'Select a key of the JSON in the textarea, then click this button'
         itemDataEl.appendChild(button)
 
         button.addEventListener('click', (event) => {
