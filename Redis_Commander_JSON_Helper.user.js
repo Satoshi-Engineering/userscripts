@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         Redis Commander JSON Helper
-// @namespace    https://satoshiengineering.com/
-// @version      0.2
+// @namespace    https://github.com/Satoshi-Engineering/userscripts
+// @version      0.3
 // @description  Help you editing JSONs in Redis Commander
 // @author       dave@satoshiengineering.com
-// @include      http://localhost:6380/
-// @match        https://rcmd.coinr.satoshiengineering.com/
-// @icon         https://rcmd.coinr.satoshiengineering.com/favicon.png
+// @match        
+// @icon         https://joeferner.github.io/redis-commander/favicon.png
 // @grant        none
 // ==/UserScript==
 
