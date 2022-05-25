@@ -5,6 +5,7 @@
 // @description  Help you editing JSONs in Redis Commander (https://joeferner.github.io/redis-commander/)
 // @author       https://github.com/dr-erych
 // @icon         https://joeferner.github.io/redis-commander/favicon.png
+// @require      https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js#sha512=F+u8eWHrfY8Xw9BLzZ8rG/0wIvs0y+JyRJrXjp3VjtFPylAEEGwKbua5Ip/oiVhaTDaDs4eU2Xtsxjs/9ag2bQ
 // @grant        none
 // ==/UserScript==
 
@@ -103,6 +104,36 @@
             commandInput.value = `json.set ${redisKey} $.${jsonPath || ''} 'null'`
             commandInput.focus()
         })
+
+        itemDataEl.appendChild(document.createElement('br'))
+        itemDataEl.appendChild(document.createElement('br'))
+        const buttonConvertTimestamp = document.createElement('button')
+        buttonConvertTimestamp.textContent = 'Milliseconds to Date ⏰'
+        buttonConvertTimestamp.title = 'Select a timestamp value in the textarea, then click this button'
+        itemDataEl.appendChild(buttonConvertTimestamp)
+        itemDataEl.appendChild(document.createTextNode(' '))
+        const dateContainer = document.createElement('span')
+        const inputTimestamp = document.createElement('input')
+        const inputDate = document.createElement('input')
+        dateContainer.appendChild(inputTimestamp)
+        dateContainer.appendChild(document.createTextNode(' <-> '))
+        dateContainer.appendChild(inputDate)
+        itemDataEl.appendChild(dateContainer)
+        itemDataEl.appendChild(document.createElement('br'))
+        dateContainer.style.display = 'none'
+        buttonConvertTimestamp.addEventListener('click', (event) => {
+            event.preventDefault()
+            dateContainer.style.display = 'inline'
+            const tsString = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd).trim()
+            if (tsString.length < 1) {
+                inputTimestamp.value = 'Nothing selected?'
+                return
+            }
+            inputTimestamp.value = Number(tsString)
+            inputDate.value = new Date(Number(inputTimestamp.value)).toISOString()
+        })
+        inputDate.addEventListener('input', ({ currentTarget }) => { inputTimestamp.value = new Date(currentTarget.value).getTime() })
+        inputTimestamp.addEventListener('input', ({ currentTarget }) => { inputDate.value = new Date(Number(currentTarget.value)).toISOString() })
     }
 
     const observer = new MutationObserver((mutations) => {
