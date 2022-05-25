@@ -5,7 +5,6 @@
 // @description  Help you editing JSONs in Redis Commander (https://joeferner.github.io/redis-commander/)
 // @author       https://github.com/dr-erych
 // @icon         https://joeferner.github.io/redis-commander/favicon.png
-// @require      https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js#sha512=F+u8eWHrfY8Xw9BLzZ8rG/0wIvs0y+JyRJrXjp3VjtFPylAEEGwKbua5Ip/oiVhaTDaDs4eU2Xtsxjs/9ag2bQ
 // @grant        none
 // ==/UserScript==
 
