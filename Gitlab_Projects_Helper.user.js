@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gitlab projects helper
-// @namespace    https://satoshiengineering.com/
+// @namespace    https://github.com/Satoshi-Engineering/userscripts
 // @version      0.1
 // @description  Add links to directly filter for our project labels
 // @author       dr-erych
