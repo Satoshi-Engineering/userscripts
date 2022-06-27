@@ -3,7 +3,7 @@
 // @namespace    https://github.com/Satoshi-Engineering/userscripts
 // @version      0.1
 // @description  Add links to directly filter for our project labels
-// @author       dr-erych
+// @author       https://github.com/dr-erych
 // @match        https://gitlab.satoshiengineering.com/satoshiengineering/projects/-/boards/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=satoshiengineering.com
 // @grant        none
