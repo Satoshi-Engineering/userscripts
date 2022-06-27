@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab projects helper
 // @namespace    https://github.com/Satoshi-Engineering/userscripts
-// @version      0.1
+// @version      0.2
 // @description  Add links to directly filter for our project labels
 // @author       https://github.com/dr-erych
 // @match        https://gitlab.satoshiengineering.com/satoshiengineering/projects/-/boards/*
@@ -34,17 +34,19 @@
     console.log(labels, json[0].data.workspace.labels.nodes)
 
     const parentEl = document.querySelector('.breadcrumbs-container')
+    const containerEl = document.createElement('div')
+    containerEl.style = 'display: flex; flex-wrap: wrap; flex: 2; min-width: 0; margin-left: 10px; justify-content: flex-end;'
 
     labels.forEach(label => {
-        const html = `<span class="gl-label js-no-trigger gl-label-sm gl-label-text-light" style="--label-background-color:#808080; --label-inset-border:inset 0 0 0 1px #808080; margin-right: 4px;">
+        const html = `<span class="gl-label js-no-trigger gl-label-sm gl-label-text-light" style="--label-background-color:#808080; --label-inset-border:inset 0 0 0 1px #808080; margin-right: 4px; margin-bottom: 4px;">
          <a href="#" class="gl-link gl-label-link"><span class="gl-label-text">
              ${label}
          </span></a></span>`
         const labelEl = new DOMParser().parseFromString(html, 'text/html').body.childNodes[0]
-        parentEl.appendChild(labelEl)
+        containerEl.appendChild(labelEl)
         const labelLink = labelEl.querySelector('a')
         labelLink.href = `${location.origin}${location.pathname}?label_name[]=${label}`
     })
 
-
+    parentEl.appendChild(containerEl)
 })()
