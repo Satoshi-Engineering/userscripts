@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab projects helper
 // @namespace    https://github.com/Satoshi-Engineering/userscripts
-// @version      0.2
+// @version      0.3
 // @description  Add links to directly filter for our project labels
 // @author       https://github.com/dr-erych
 // @match        https://gitlab.satoshiengineering.com/satoshiengineering/projects/-/boards/*
@@ -11,6 +11,8 @@
 
 (async function() {
     'use strict'
+
+    const LABEL_COLOR = '#808080'
 
     const csrfToken = document.querySelector('meta[name=csrf-token]').content
 
@@ -27,25 +29,43 @@
 
     const json = await res.json()
 
-    const labels = json[0].data.workspace.labels.nodes
-        .filter(({ color }) => color === '#808080')
+    let labels = json[0].data.workspace.labels.nodes
+        .filter(({ color }) => color === LABEL_COLOR)
         .map(({ title }) => title)
-
-    console.log(labels, json[0].data.workspace.labels.nodes)
 
     const parentEl = document.querySelector('.breadcrumbs-container')
     const containerEl = document.createElement('div')
     containerEl.style = 'display: flex; flex-wrap: wrap; flex: 2; min-width: 0; margin-left: 10px; justify-content: flex-end;'
 
+    labels = [null, ...labels]
+
     labels.forEach(label => {
-        const html = `<span class="gl-label js-no-trigger gl-label-sm gl-label-text-light" style="--label-background-color:#808080; --label-inset-border:inset 0 0 0 1px #808080; margin-right: 4px; margin-bottom: 4px;">
-         <a href="#" class="gl-link gl-label-link"><span class="gl-label-text">
-             ${label}
-         </span></a></span>`
-        const labelEl = new DOMParser().parseFromString(html, 'text/html').body.childNodes[0]
-        containerEl.appendChild(labelEl)
+        const labelTitle = typeof label === 'string' && label !== '' ? label : 'All'
+        const labelHtml = `
+          <span
+            class="gl-label js-no-trigger gl-label-sm ${label != null ? 'gl-label-text-light' : ''}"
+            style="--label-background-color:${label != null ? LABEL_COLOR : '#fff'}; --label-inset-border:inset 0 0 0 1px ${LABEL_COLOR}; margin-right: 4px; margin-bottom: 4px; ${label == null ? `color: ${LABEL_COLOR};` : ''}"
+          >
+            <a href="#" class="gl-link gl-label-link">
+              <span class="gl-label-text">${labelTitle}</span>
+            </a>
+          </span>
+        `
+        const labelEl = new DOMParser().parseFromString(labelHtml, 'text/html').body.childNodes[0]
         const labelLink = labelEl.querySelector('a')
-        labelLink.href = `${location.origin}${location.pathname}?label_name[]=${label}`
+
+        labelLink.addEventListener('click', (event) => {
+            event.preventDefault()
+            const oldParams = (new URL(document.location)).searchParams
+            const newParams = new URLSearchParams([...oldParams.entries()].filter(([key, value]) => !(key === 'label_name[]' && labels.includes(value))))
+            if (label != null) {
+                newParams.append('label_name[]', label)
+            }
+
+            location.href = `${location.origin}${location.pathname}?${newParams.toString()}`
+        })
+
+        containerEl.appendChild(labelEl)
     })
 
     parentEl.appendChild(containerEl)
