@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab projects helper
 // @namespace    https://github.com/Satoshi-Engineering/userscripts
-// @version      0.3
+// @version      0.4
 // @description  Add links to directly filter for our project labels
 // @author       https://github.com/dr-erych
 // @match        https://gitlab.satoshiengineering.com/satoshiengineering/projects/-/boards/*
@@ -33,14 +33,13 @@
         .filter(({ color }) => color === LABEL_COLOR)
         .map(({ title }) => title)
 
-    const parentEl = document.querySelector('.breadcrumbs-container')
+    labels = [null, ...labels]
+
     const containerEl = document.createElement('div')
     containerEl.style = 'display: flex; flex-wrap: wrap; flex: 2; min-width: 0; margin-left: 10px; justify-content: flex-end;'
 
-    labels = [null, ...labels]
-
     labels.forEach(label => {
-        const labelTitle = typeof label === 'string' && label !== '' ? label : 'All'
+        const labelTitle = label != null ? label : 'All'
         const labelHtml = `
           <span
             class="gl-label js-no-trigger gl-label-sm ${label != null ? 'gl-label-text-light' : ''}"
@@ -68,5 +67,6 @@
         containerEl.appendChild(labelEl)
     })
 
+    const parentEl = document.querySelector('.breadcrumbs-container')
     parentEl.appendChild(containerEl)
 })()
