@@ -127,7 +127,8 @@
 
         itemDataEl.appendChild(document.createElement('br'))
         itemDataEl.appendChild(document.createElement('br'))
-        addButton('Milliseconds to Date ⏰', 'Select a timestamp value in the textarea, then click this button', ({ redisKey, textarea, commandInput }) => {
+        let timestampFormat = 'milliseconds'
+        addButton('Timestamp to Date ⏰', 'Select a timestamp value in the textarea, then click this button', ({ redisKey, textarea, commandInput }) => {
             dateContainer.style.display = 'inline'
             const tsString = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd).trim()
             if (tsString.length < 1) {
@@ -135,19 +136,28 @@
                 return
             }
             inputTimestamp.value = Number(tsString)
-            inputDate.value = new Date(Number(inputTimestamp.value)).toISOString()
+            if (Math.abs(Date.now() - inputTimestamp.value) > Math.abs(Date.now() - inputTimestamp.value * 1000)) {
+                timestampFormat = 'seconds'
+            } else {
+                timestampFormat = 'milliseconds'
+            }
+            timestampFormatDisplay.textContent = ` (Timestamp format: ${timestampFormat})`
+            inputDate.value = new Date(Number(inputTimestamp.value) * (timestampFormat === 'seconds' ? 1000 : 1)).toISOString()
         })
         const dateContainer = document.createElement('span')
         const inputTimestamp = document.createElement('input')
         const inputDate = document.createElement('input')
+        const timestampFormatDisplay = document.createElement('small')
+        timestampFormatDisplay.textContent = ` (Timestamp format: ${timestampFormat})`
         dateContainer.appendChild(inputTimestamp)
         dateContainer.appendChild(document.createTextNode(' <-> '))
         dateContainer.appendChild(inputDate)
+        dateContainer.appendChild(timestampFormatDisplay)
         itemDataEl.appendChild(dateContainer)
         itemDataEl.appendChild(document.createElement('br'))
         dateContainer.style.display = 'none'
-        inputDate.addEventListener('input', ({ currentTarget }) => { inputTimestamp.value = new Date(currentTarget.value).getTime() })
-        inputTimestamp.addEventListener('input', ({ currentTarget }) => { inputDate.value = new Date(Number(currentTarget.value)).toISOString() })
+        inputDate.addEventListener('input', ({ currentTarget }) => { inputTimestamp.value = new Date(currentTarget.value).getTime() / (timestampFormat === 'seconds' ? 1000 : 1) })
+        inputTimestamp.addEventListener('input', ({ currentTarget }) => { inputDate.value = new Date(Number(currentTarget.value) * (timestampFormat === 'seconds' ? 1000 : 1)).toISOString() })
 
         itemDataEl.appendChild(document.createElement('br'))
         itemDataEl.appendChild(document.createElement('br'))
