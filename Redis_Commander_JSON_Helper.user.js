@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Redis Commander JSON Helper
 // @namespace    https://github.com/Satoshi-Engineering/userscripts
-// @version      0.5
+// @version      0.6
 // @description  Help you editing JSONs in Redis Commander (https://joeferner.github.io/redis-commander/)
 // @author       https://github.com/dr-erych
 // @icon         https://joeferner.github.io/redis-commander/favicon.png
