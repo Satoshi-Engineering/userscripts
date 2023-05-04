@@ -67,6 +67,6 @@
         containerEl.appendChild(labelEl)
     })
 
-    const parentEl = document.querySelector('.breadcrumbs-container')
+    const parentEl = document.querySelector('.top-bar-container')
     parentEl.appendChild(containerEl)
 })()
